@@ -1,31 +1,47 @@
 package org.magnum.mobilecloud.video.model;
 
+import java.util.Collection;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Objects;
 
 /**
- * A simple object to represent a video and its URL for viewing.
- * 
- * You must annotate this object to make it a JPA entity.
- * 
- * 
- * Feel free to modify this with whatever other metadata that you want, such as
- * the
- * 
+ * A simple object to represent a video and its URL for viewing. You must annotate this object to make it a JPA entity.
+ * Feel free to modify this with whatever other metadata that you want, such as the
  * 
  * @author jules, mitchell
  */
+@Entity
 public class Video {
 
+	@Id
+	@GeneratedValue
 	private long id;
 
+	@Column
 	private String title;
+
+	@Column
 	private String url;
+
+	@Column
 	private long duration;
+
+	@Column
 	private String location;
+
+	@Column
 	private String subject;
+
+	@Column
 	private String contentType;
 
 	// We don't want to bother unmarshalling or marshalling
@@ -33,18 +49,30 @@ public class Video {
 	// want the client trying to tell us who the owner is.
 	// We also might want to keep the owner secret.
 	@JsonIgnore
+	@Column
 	private String owner;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "video", fetch = FetchType.LAZY)
+	private Collection<UserVideoRating> ratings;
 
 	public Video() {
 	}
 
-	public Video(String owner, String name, String url, long duration,
-			long likes, Set<String> likedBy) {
+	public Video(String owner, String name, String url, long duration, long likes, Set<String> likedBy) {
 		super();
 		this.owner = owner;
 		this.title = name;
 		this.url = url;
 		this.duration = duration;
+	}
+
+	public Collection<UserVideoRating> getRatings() {
+		return ratings;
+	}
+
+	public void setRatings(Collection<UserVideoRating> ratings) {
+		this.ratings = ratings;
 	}
 
 	public String getTitle() {
@@ -112,9 +140,8 @@ public class Video {
 	}
 
 	/**
-	 * Two Videos will generate the same hashcode if they have exactly the same
-	 * values for their name, url, and duration.
-	 * 
+	 * Two Videos will generate the same hashcode if they have exactly the same values for their name, url, and
+	 * duration.
 	 */
 	@Override
 	public int hashCode() {
@@ -123,19 +150,14 @@ public class Video {
 	}
 
 	/**
-	 * Two Videos are considered equal if they have exactly the same values for
-	 * their name, url, and duration.
-	 * 
+	 * Two Videos are considered equal if they have exactly the same values for their name, url, and duration.
 	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Video) {
 			Video other = (Video) obj;
 			// Google Guava provides great utilities for equals too!
-			return Objects.equal(title, other.title)
-					&& Objects.equal(url, other.url)
-					&& Objects.equal(owner, other.owner)
-					&& duration == other.duration;
+			return Objects.equal(title, other.title) && Objects.equal(url, other.url) && Objects.equal(owner, other.owner) && duration == other.duration;
 		} else {
 			return false;
 		}

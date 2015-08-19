@@ -41,6 +41,8 @@ public interface VideoSvcApi {
 	// The path where we expect the VideoSvc to live
 	public static final String VIDEO_DATA_PATH = VIDEO_SVC_PATH + "/{"+VideoSvcApi.ID_PARAMETER+"}/data";
 
+	public static final String VIDEO_RATING_PATH = VIDEO_SVC_PATH + "/{id}/rating";
+	
 	
 	@GET(VIDEO_SVC_PATH)
 	public Collection<Video> getVideoList();
@@ -51,10 +53,10 @@ public interface VideoSvcApi {
 	@POST(VIDEO_SVC_PATH)
 	public Video addVideo(@Body Video v);
 	
-	@POST(VIDEO_SVC_PATH+"/{id}/rating/{rating}")
+	@POST(VIDEO_RATING_PATH+"/{rating}")
 	public AverageVideoRating rateVideo(@Path("id") long id, @Path("rating") int rating);
 	
-	@GET(VIDEO_SVC_PATH+"/{id}/rating")
+	@GET(VIDEO_RATING_PATH)
 	public AverageVideoRating getVideoRating(@Path("id") long id);
 	
 	@Multipart

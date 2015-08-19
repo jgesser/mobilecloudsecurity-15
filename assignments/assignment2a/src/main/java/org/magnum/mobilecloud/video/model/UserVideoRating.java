@@ -1,34 +1,48 @@
 package org.magnum.mobilecloud.video.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 // You might want to annotate this with Jpa annotations, add an id field,
 // and store it in the database...
 //
 // There are also plenty of other solutions that do not require
 // persisting instances of this...
+@Entity
 public class UserVideoRating {
-	
-	private long videoId;
 
+	@Id
+	@GeneratedValue
+	private long id;
+
+	@ManyToOne(optional = false)
+	private Video video;
+
+	@Column
 	private double rating;
 
+	@Column
 	private String user;
 
 	public UserVideoRating() {
 	}
 
-	public UserVideoRating(long videoId, double rating, String user) {
+	public UserVideoRating(Video video, double rating, String user) {
 		super();
-		this.videoId = videoId;
+		this.video = video;
 		this.rating = rating;
 		this.user = user;
 	}
 
-	public long getVideoId() {
-		return videoId;
+	public Video getVideo() {
+		return video;
 	}
 
-	public void setVideoId(long videoId) {
-		this.videoId = videoId;
+	public void setVideo(Video video) {
+		this.video = video;
 	}
 
 	public double getRating() {

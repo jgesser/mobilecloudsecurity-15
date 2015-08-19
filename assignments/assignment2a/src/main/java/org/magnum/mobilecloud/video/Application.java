@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -22,6 +23,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 // Tell Spring to turn on WebMVC (e.g., it should enable the DispatcherServlet
 // so that requests can be routed to our Controllers)
 @EnableWebMvc
+//Tell Spring to automatically create a JPA implementation of our
+//VideoRepository
+@EnableJpaRepositories
 // Tell Spring that this object represents a Configuration for the
 // application
 @Configuration
@@ -37,7 +41,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 public class Application extends RepositoryRestMvcConfiguration {
 
 	private static final String MAX_REQUEST_SIZE = "150MB";
-	
+
 	// The app now requires that you pass the location of the keystore and
 	// the password for your private key that you would like to setup HTTPS
 	// with. In Eclipse, you can set these options by going to:
@@ -58,7 +62,7 @@ public class Application extends RepositoryRestMvcConfiguration {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-	
+
 	@Bean
 	public VideoFileManager videoFileManager() throws IOException {
 		return new VideoFileManager();
@@ -67,7 +71,7 @@ public class Application extends RepositoryRestMvcConfiguration {
 	// This configuration element adds the ability to accept multipart
 	// requests to the web container.
 	@Bean
-    public MultipartConfigElement multipartConfigElement() {
+	public MultipartConfigElement multipartConfigElement() {
 		// Setup the application container to be accept multipart requests
 		final MultiPartConfigFactory factory = new MultiPartConfigFactory();
 		// Place upper bounds on the size of the requests to ensure that
@@ -78,5 +82,5 @@ public class Application extends RepositoryRestMvcConfiguration {
 		// Return the configuration to setup multipart in the container
 		return factory.createMultipartConfig();
 	}
-	
+
 }
